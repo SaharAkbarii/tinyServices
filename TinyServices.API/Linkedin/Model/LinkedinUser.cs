@@ -4,6 +4,9 @@ using TinyServices.API.LinkService.Model;
 namespace TinyServices.API.Linkedin.Model;
 public class LinkedinUser : Entity
 {
+    private List<Connection>? _conections;
+    private List<ConnectionRequest>? _connectionRequests;
+
     protected LinkedinUser()
     {
 
@@ -18,9 +21,30 @@ public class LinkedinUser : Entity
     public string UserName { get; set; }
     public string PasswordHash { get; private set; }
     public Email Email { get; set; }
-    public List<Connection>? Conections { get; set; }
+    public List<Connection> Conections
+    {
+        get
+        {
+            if (_conections == null)
 
-    public static string CreateMD5(string input)
+                _conections = new List<Connection>();
+
+            return _conections;
+        }
+        set => _conections = value;
+    }
+    public List<ConnectionRequest> ConnectionRequests
+    {
+        get
+        {
+            if (_connectionRequests == null)
+                _connectionRequests = new List<ConnectionRequest>();
+
+            return _connectionRequests;
+        }
+        set => _connectionRequests = value;
+    }
+    private static string CreateMD5(string input)
     {
         using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
         {
@@ -31,10 +55,6 @@ public class LinkedinUser : Entity
         }
     }
 
-    public void AddingConnections(Connection connection)
-    {
-        if(connection.IsConfirmed)
-            Conections.Add(connection);
-    }
+
 
 }

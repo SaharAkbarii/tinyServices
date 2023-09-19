@@ -4,11 +4,15 @@ namespace TinyServices.API.Linkedin.Model;
 
 public class Connection : Entity
 {
-    protected Connection(LinkedinUser user)
+    protected Connection()
+    {
+        
+    }
+    public Connection(LinkedinUser user, LinkedinUser connectionUser)
     {
         User = user;
-        IsConfirmed = false;
+        ConnectionUser = connectionUser;
     }
     public LinkedinUser User { get; set; }
-    public bool IsConfirmed { get; set; }
+    public LinkedinUser ConnectionUser { get; set; }
 }

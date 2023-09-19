@@ -27,5 +27,30 @@ public class LinkedinUserController : Controller
         var dto = mapper.Map<LinkedinUserDto>(user);
         return dto;
     }
+    [HttpPut]
+    [Route("{senderId:guid}/connectionRequest/{receiverId:guid}")]
+    public ConnectionRequestDto SendConnectionRequest(Guid senderId, Guid receiverId)
+    {
+        var connectionRequest = service.SendConnectionRequest(senderId, receiverId);
+        var dto = mapper.Map<ConnectionRequestDto>(connectionRequest);
+        return dto;
+    }
+
+    [HttpPut]
+    [Route("connection/{id:guid}/accept")]
+    public ConnectionDto AcceptConnectRequest(Guid id)
+    {
+        var connection = service.AcceptConnectRequest(id);
+        var dto = mapper.Map<ConnectionDto>(connection);
+        return dto;
+    }
+
+    [HttpDelete]
+    [Route("connection/{id:guid}/reject")]
+    public void RejectConnectRequest(Guid id)
+    {
+        service.RejectConnectRequest(id);
+    }
 
 }
+

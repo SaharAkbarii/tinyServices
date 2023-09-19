@@ -27,5 +27,7 @@ public class TinyServicesMappingProfile : Profile
         CreateMap<LinkedinUser, LinkedinUserDto>();
         CreateMap<Like, LikeDto>();
         CreateMap<Comment, CommentDto>();
+        CreateMap<ConnectionRequest, ConnectionRequestDto>();
+        CreateMap<Connection, ConnectionDto>();
     }
 }
