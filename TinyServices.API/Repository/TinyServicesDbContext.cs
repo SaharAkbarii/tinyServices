@@ -20,6 +20,8 @@ public class TinyServicesDbContext : DbContext
     modelBuilder.Entity<Advertisement>().OwnsOne(o => o.PhoneNumber);
     modelBuilder.Entity<CategoryProperty>().HasIndex("Title", "CategoryId").IsUnique();
     modelBuilder.Entity<LinkedinUser>().OwnsOne(o => o.Email).HasIndex(x=> x.Value).IsUnique();
+    modelBuilder.Entity<Connection>().HasOne(o => o.User).WithMany(o=> o.Conections);
+    modelBuilder.Entity<ConnectionRequest>().HasOne(o=> o.Receiver).WithMany(o=> o.ConnectionRequests);
   }
 
   public DbSet<ShortLink> ShortLinks { get; set; }
@@ -36,4 +38,6 @@ public class TinyServicesDbContext : DbContext
   public DbSet<LinkedinPost> linkedinPosts {get; set;}
   public DbSet<Like> Likes {get; set; }
   public DbSet<Comment> Comments {get; set;}
+  public DbSet<ConnectionRequest> ConnectionRequests {get; set;}
+  public DbSet<Connection> Connections {get; set;}
 }

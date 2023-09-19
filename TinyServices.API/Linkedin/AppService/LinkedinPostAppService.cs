@@ -17,9 +17,9 @@ public class LinkedinPostAppService
             throw new Exception($"user with id {userId} not found");
 
         var post = new LinkedinPost(user, postDescription);
-        if(imageUrls!= null)
-            post.ImageUrls=imageUrls; 
-        
+        if (imageUrls != null)
+            post.ImageUrls = imageUrls;
+
         dbContext.linkedinPosts.Add(post);
         dbContext.SaveChanges();
         return post;
@@ -35,7 +35,7 @@ public class LinkedinPostAppService
             .FirstOrDefault(x => x.Id == postId) ??
             throw new Exception($"post with id {postId} not found");
         var like = new Like(post, user);
-    
+
         dbContext.Likes.Add(like);
         dbContext.SaveChanges();
 
@@ -62,7 +62,7 @@ public class LinkedinPostAppService
     {
         var post = dbContext.linkedinPosts
             .Include(x => x.Likes)
-            .ThenInclude(x=> x.LinkedinUser)
+            .ThenInclude(x => x.LinkedinUser)
             .FirstOrDefault(x => x.Id == postId) ??
             throw new Exception($"post with id {postId} not found");
 
@@ -76,12 +76,13 @@ public class LinkedinPostAppService
 
     public LinkedinPost RemoveCm(Guid cmId)
     {
-        var cm = dbContext.Comments.FirstOrDefault(x=> x.Id == cmId)??
+        var cm = dbContext.Comments.FirstOrDefault(x => x.Id == cmId) ??
             throw new Exception($"comment with id {cmId} not found.");
         var post = cm.LinkedinPost;
-        
+
         dbContext.Comments.Remove(cm);
         dbContext.SaveChanges();
         return post;
     }
+
 }
