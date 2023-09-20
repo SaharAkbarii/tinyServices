@@ -39,4 +39,5 @@ public class LinkedinPost : Entity
         }
         set => comments = value;
     }
+
 }

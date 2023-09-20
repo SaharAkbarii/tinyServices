@@ -74,7 +74,7 @@ public class LinkedinPostAppService
         return post;
     }
 
-    public LinkedinPost RemoveCm(Guid cmId)
+    public LinkedinPost RemoveComment(Guid cmId)
     {
         var cm = dbContext.Comments.FirstOrDefault(x => x.Id == cmId) ??
             throw new Exception($"comment with id {cmId} not found.");

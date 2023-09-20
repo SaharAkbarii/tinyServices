@@ -22,6 +22,7 @@ public class TinyServicesDbContext : DbContext
     modelBuilder.Entity<LinkedinUser>().OwnsOne(o => o.Email).HasIndex(x=> x.Value).IsUnique();
     modelBuilder.Entity<Connection>().HasOne(o => o.User).WithMany(o=> o.Conections);
     modelBuilder.Entity<ConnectionRequest>().HasOne(o=> o.Receiver).WithMany(o=> o.ConnectionRequests);
+    // modelBuilder.Entity<LinkedinUser>().HasOne()
   }
 
   public DbSet<ShortLink> ShortLinks { get; set; }

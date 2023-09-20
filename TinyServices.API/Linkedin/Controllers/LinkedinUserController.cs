@@ -52,5 +52,26 @@ public class LinkedinUserController : Controller
         service.RejectConnectRequest(id);
     }
 
+    [HttpGet]
+    [Route("{id:guid}/feed/{offset:int}/{count:int}")]
+    public List<PostInformationDto> Feed(Guid id, int offset, int count)
+    {
+        var posts = service.Feed(id, offset, count);
+        var dto = mapper.Map<List<PostInformationDto>>(posts);
+        return dto;
+    }
+
 }
+
+    // public List<LinkedinPost> Feed(Guid id, int offset, int count)
+    // {
+    //     var posts = dbContext.linkedinPosts
+    //         .Where(x=> x.User.Conections.Any(y=> y.ConnectionUser.Id==id))
+    //         .OrderByDescending(x=> x.CreatedAt)
+    //         .Skip(offset)
+    //         .Take(count)
+    //         .ToList();
+        
+    //     return posts;
+    // }
 

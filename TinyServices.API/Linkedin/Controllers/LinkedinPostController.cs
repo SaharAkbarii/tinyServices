@@ -36,7 +36,7 @@ public class LinkedinPostController : Controller
         return dto;
     }
 
-    [HttpPut]
+    [HttpPost]
     [Route("{id:guid}/comment/{userId:guid}")]
     public CommentDto Comment(Guid userId, Guid id,[FromBody] CreateCommentInput input)
     {
@@ -46,19 +46,19 @@ public class LinkedinPostController : Controller
     }
 
     [HttpDelete]
-    [Route("{postId:guid}/like/{userId:guid}")]
-    public LinkedinPostDto RemoveLike(Guid postId, Guid userId)
+    [Route("{id:guid}/like/{userId:guid}")]
+    public LinkedinPostDto RemoveLike(Guid id, Guid userId)
     {
-        var post = service.RemoveLike(userId, postId);
+        var post = service.RemoveLike(userId, id);
         var dto = mapper.Map<LinkedinPostDto>(post);
         return dto;
     }
 
     [HttpDelete]
-    [Route("{cmId:guid}/cm")]
-    public LinkedinPostDto RemoveCm(Guid cmId)
+    [Route("comment/{id:guid}")]
+    public LinkedinPostDto RemoveComment(Guid id)
     {
-        var post = service.RemoveCm(cmId);
+        var post = service.RemoveComment(id);
         var dto = mapper.Map<LinkedinPostDto>(post);
         return dto;
     }

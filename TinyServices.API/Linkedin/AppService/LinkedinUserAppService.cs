@@ -62,6 +62,31 @@ public class LinkedinUserAppService
         connectionRequest.Reject();
         dbContext.SaveChanges();
     }
+    public List<PostInformation> Feed(Guid id, int offset, int count)
+    {
+        var posts = dbContext.linkedinPosts
+            .Include(x => x.User)
+            .Where(x => x.User.Conections.Any(y => y.ConnectionUser.Id == id))
+            .OrderByDescending(x => x.CreatedAt)
+            .Skip(offset)
+            .Take(count)
+            .Select(x => new PostInformation
+            {
+                Id = x.Id,
+                Description = x.Description,
+                PostedAt = x.CreatedAt,
+                ImageUrls = x.ImageUrls,
+                PostedBy = new LinkedinUserInformation(x.User.Id, x.User.UserName),
+                Likes = x.Likes.Count(),
+                Commenters = x.Comments.OrderByDescending(x=> x.CreatedAt)
+                    .Take(3)
+                    .Select(c=> new LinkedinUserInformation(c.LinkedinUser.Id, c.LinkedinUser.UserName))
+                    .ToList()
+            })
+            .ToList();
+
+        return posts;
+    }
 
     private void ThrowIfRequestIsAlreadyExisted(Guid senderId, Guid receiverId)
     {

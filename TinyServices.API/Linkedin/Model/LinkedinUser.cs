@@ -21,6 +21,7 @@ public class LinkedinUser : Entity
     public string UserName { get; set; }
     public string PasswordHash { get; private set; }
     public Email Email { get; set; }
+    public List<LinkedinPost> Posts {get; set;}
     public List<Connection> Conections
     {
         get
