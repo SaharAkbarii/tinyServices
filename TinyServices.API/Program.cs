@@ -5,6 +5,8 @@ using AutoMapper.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using TinyServices.API.Divar.AppService;
 using TinyServices.API.Linkedin.AppService;
+using System.Linq.Expressions;
+using TinyServices.API.NewsMagazine.AppService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,9 @@ builder.Services.AddScoped<UserAppService>();
 builder.Services.AddScoped<AdvertisementAppService>();
 builder.Services.AddScoped<LinkedinUserAppService>();
 builder.Services.AddScoped<LinkedinPostAppService>();
+builder.Services.AddScoped<NewsAppService>();
+builder.Services.AddScoped<NewsUserAppService>();
+builder.Services.AddScoped<NewsCategoryAppService>();
 builder.Services.AddDbContext<TinyServicesDbContext>(b =>
             {
                 string connectionString = builder.Configuration.GetValue<string>("ConnectionStrings");

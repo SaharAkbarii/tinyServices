@@ -1,0 +1,8 @@
+namespace TinyServices.API.NewsMagazine.Model;
+
+public class NewsUserInformation
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+}
+

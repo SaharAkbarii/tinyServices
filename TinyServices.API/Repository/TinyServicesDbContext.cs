@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TinyServices.API.Divar.Model;
 using TinyServices.API.Linkedin.Model;
 using TinyServices.API.LinkService.Model;
+using TinyServices.API.NewsMagazine.Model;
 
 
 namespace TinyServices.API.Repository;
@@ -22,6 +23,9 @@ public class TinyServicesDbContext : DbContext
     modelBuilder.Entity<LinkedinUser>().OwnsOne(o => o.Email).HasIndex(x=> x.Value).IsUnique();
     modelBuilder.Entity<Connection>().HasOne(o => o.User).WithMany(o=> o.Conections);
     modelBuilder.Entity<ConnectionRequest>().HasOne(o=> o.Receiver).WithMany(o=> o.ConnectionRequests);
+    modelBuilder.Entity<NewsUser>().OwnsOne(o=> o.Email).HasIndex(x=> x.Value).IsUnique();
+    modelBuilder.Entity<News>().HasMany(o=> o.Likes).WithOne(x=> x.NewsPost);
+    modelBuilder.Entity<NewsLike>().HasOne(o=> o.NewsUser);
     // modelBuilder.Entity<LinkedinUser>().HasOne()
   }
 
@@ -41,4 +45,11 @@ public class TinyServicesDbContext : DbContext
   public DbSet<Comment> Comments {get; set;}
   public DbSet<ConnectionRequest> ConnectionRequests {get; set;}
   public DbSet<Connection> Connections {get; set;}
+  public DbSet<News> News {get; set;}
+  public DbSet<NewsUser> NewsUsers {get; set;}
+  public DbSet<NewsLike> NewsLikes {get; set;}
+  public DbSet<NewsDisLike> NewsDisLikes { get; set; }
+  public DbSet<NewsComment> NewsComments { get; set; }
+  public DbSet<NewsCategory> NewsCategories { get; set; }
+  public DbSet<NewsViewInfo> NewsViewInfos {get; set;}
 }

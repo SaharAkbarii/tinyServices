@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TinyServices.API.Repository;
@@ -12,9 +13,11 @@ using TinyServices.API.Repository;
 namespace TinyServices.API.Migrations
 {
     [DbContext(typeof(TinyServicesDbContext))]
-    partial class TinyServicesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231107125136_Add_NewsMagazine")]
+    partial class Add_NewsMagazine
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -448,30 +451,6 @@ namespace TinyServices.API.Migrations
                     b.ToTable("LinkedinUsers");
                 });
 
-            modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.FavoriteCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("FavoriteCategory");
-                });
-
             modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.News", b =>
                 {
                     b.Property<Guid>("Id")
@@ -503,48 +482,6 @@ namespace TinyServices.API.Migrations
                     b.ToTable("News");
                 });
 
-            modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.NewsCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NewsCategories");
-                });
-
-            modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.NewsCategoryContainer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("NewsCategoryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("NewsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NewsCategoryId");
-
-                    b.HasIndex("NewsId");
-
-                    b.ToTable("NewsCategoryContainer");
-                });
-
             modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.NewsComment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -570,7 +507,7 @@ namespace TinyServices.API.Migrations
 
                     b.HasIndex("NewsUserId");
 
-                    b.ToTable("NewsComments");
+                    b.ToTable("NewsComment");
                 });
 
             modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.NewsDisLike", b =>
@@ -594,7 +531,7 @@ namespace TinyServices.API.Migrations
 
                     b.HasIndex("NewsUserId");
 
-                    b.ToTable("NewsDisLikes");
+                    b.ToTable("NewsDisLike");
                 });
 
             modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.NewsLike", b =>
@@ -618,7 +555,7 @@ namespace TinyServices.API.Migrations
 
                     b.HasIndex("NewsUserId");
 
-                    b.ToTable("NewsLikes");
+                    b.ToTable("NewsLike");
                 });
 
             modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.NewsUser", b =>
@@ -637,23 +574,6 @@ namespace TinyServices.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("NewsUsers");
-                });
-
-            modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.NewsViewInfo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("NewsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NewsViewInfos");
                 });
 
             modelBuilder.Entity("TinyServices.API.Divar.Model.Advertisement", b =>
@@ -898,44 +818,6 @@ namespace TinyServices.API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.FavoriteCategory", b =>
-                {
-                    b.HasOne("TinyServices.API.NewsMagazine.Model.NewsCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TinyServices.API.NewsMagazine.Model.NewsUser", "User")
-                        .WithMany("FavoriteCategories")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.NewsCategoryContainer", b =>
-                {
-                    b.HasOne("TinyServices.API.NewsMagazine.Model.NewsCategory", "NewsCategory")
-                        .WithMany()
-                        .HasForeignKey("NewsCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TinyServices.API.NewsMagazine.Model.News", "News")
-                        .WithMany("NewsCategories")
-                        .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("News");
-
-                    b.Navigation("NewsCategory");
-                });
-
             modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.NewsComment", b =>
                 {
                     b.HasOne("TinyServices.API.NewsMagazine.Model.News", "News")
@@ -1062,13 +944,6 @@ namespace TinyServices.API.Migrations
                     b.Navigation("DisLikes");
 
                     b.Navigation("Likes");
-
-                    b.Navigation("NewsCategories");
-                });
-
-            modelBuilder.Entity("TinyServices.API.NewsMagazine.Model.NewsUser", b =>
-                {
-                    b.Navigation("FavoriteCategories");
                 });
 #pragma warning restore 612, 618
         }

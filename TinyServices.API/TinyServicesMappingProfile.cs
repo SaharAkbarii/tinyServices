@@ -5,6 +5,8 @@ using TinyServices.API.Linkedin.Dto;
 using TinyServices.API.Linkedin.Model;
 using TinyServices.API.LinkService.Dto;
 using TinyServices.API.LinkService.Model;
+using TinyServices.API.NewsMagazine.Dto;
+using TinyServices.API.NewsMagazine.Model;
 
 namespace TinyServices.API;
 
@@ -31,5 +33,19 @@ public class TinyServicesMappingProfile : Profile
         CreateMap<Connection, ConnectionDto>();
         CreateMap<PostInformation, PostInformationDto>();
         CreateMap<LinkedinUserInformation, LinkedinUserInformationDto>();
+        CreateMap<News, NewsDto>();
+        CreateMap<NewsLike, NewsLikeDto>();
+        CreateMap<NewsComment, NewsCommentDto>();
+        CreateMap<NewsDisLike, NewsDisLikeDto>();
+        CreateMap<Status, StatusDto>();
+        CreateMap<StatusDto, Status>();
+        CreateMap<NewsUser, NewsUserDto>();
+        CreateMap<NewsUserInformation, NewsUserInformationDto>();
+        CreateMap<NewsInformation, NewsInformationDto>();
+        CreateMap<NewsCommentInformation, NewsCommentInformationDto>();
+        CreateMap<NewsCategory, NewsCategoryDto>();
+        CreateMap<FavoriteCategory, FavoriteCategoryDto>();
+        CreateMap<NewsCategoryContainer, NewsCategoryContainerDto>();
+        
     }
 }
