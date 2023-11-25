@@ -26,19 +26,18 @@ public class NewsUserAppService
             .Include(x => x.Likes)
             .Include(x => x.Comments)
             .Include(x => x.DisLikes)
-            .Include(x=> x.NewsCategories)
-                .ThenInclude(c=> c.NewsCategory)
+            .Include(x => x.NewsCategories)
+                .ThenInclude(c => c.NewsCategory)
             .Where(x => x.Status == Status.Publish);
 
         var user = dbContext.NewsUsers
-            .Include(x=> x.FavoriteCategories)
-                .ThenInclude(c=> c.Category)
-            .FirstOrDefault(x=> x.Id == userId);
-        
+            .Include(x => x.FavoriteCategories)
+                .ThenInclude(c => c.Category)
+            .FindModel(userId);
 
         if (user.FavoriteCategories != null && user.FavoriteCategories.Any())
         {
-            var categoryIds = user.FavoriteCategories.Select(x=> x.Category.Id);
+            var categoryIds = user.FavoriteCategories.Select(x => x.Category.Id);
             query = query.Where(x => x.NewsCategories.Any(y => categoryIds.Any(c => c == y.NewsCategory.Id)));
         }
 
@@ -55,7 +54,7 @@ public class NewsUserAppService
             NewsNumber = x.NewsNumber,
             PublishAt = x.PublishAt,
             Title = x.Title,
-            ViewCount = dbContext.NewsViewInfos.Count(n=> n.NewsId == x.Id),
+            ViewCount = dbContext.NewsViewInfos.Count(n => n.NewsId == x.Id),
             Comments = x.Comments.OrderByDescending(x => x.CreatedAt)
                 .Take(10)
                 .Select(c => new NewsCommentInformation
@@ -78,14 +77,12 @@ public class NewsUserAppService
     }
     public NewsUser SetFavoriteCategory(Guid userId, List<Guid> categoryIds)
     {
-        var user = dbContext.NewsUsers.FirstOrDefault(x => x.Id == userId) ??
-            throw new Exception($"user with id: {userId} not found.");
+        var user = dbContext.NewsUsers.FindModel(userId);
 
         user.FavoriteCategories.Clear();
         for (int i = 0; i < categoryIds.Count; i++)
         {
-            var category = dbContext.NewsCategories.FirstOrDefault(x => x.Id == categoryIds[i]) ??
-                throw new Exception($"category with id: {categoryIds[i]} not found.");
+            var category = dbContext.NewsCategories.FindModel(categoryIds[i]);
             var favoriteCategory = new FavoriteCategory(user, category);
             user.FavoriteCategories.Add(favoriteCategory);
         }

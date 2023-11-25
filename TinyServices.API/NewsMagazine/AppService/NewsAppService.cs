@@ -19,8 +19,7 @@ public class NewsAppService
         news.NewsNumber = GenerateNewsNumber();
         for (var i = 0; i < categoryId.Count; i++)
         {
-            var category = dbContext.NewsCategories.FirstOrDefault(x => x.Id == categoryId[i]) ??
-                throw new Exception($"category with id: {categoryId[i]} not found.");
+            var category = dbContext.NewsCategories.FindModel(categoryId[i]);
             var categoryContainer = new NewsCategoryContainer(category, news);
             news.NewsCategories.Add(categoryContainer);
         }
@@ -31,8 +30,7 @@ public class NewsAppService
 
     public News Update(Guid newsId, string title, string body, Status status)
     {
-        var news = dbContext.News.FirstOrDefault(x => x.Id == newsId) ??
-            throw new Exception($"news with id {newsId} not found");
+        var news = dbContext.News.FindModel(newsId);
         news.Title = title;
         news.Body = body;
         news.ChangeStatus(status);
@@ -47,11 +45,9 @@ public class NewsAppService
             .ThenInclude(x => x.NewsUser)
             .Include(x => x.Comments)
             .Include(x => x.DisLikes)
-            .FirstOrDefault(x => x.Id == newsId) ??
-            throw new Exception($"news with id {newsId} not found");
+            .FindModel(newsId);
 
-        var user = dbContext.NewsUsers.FirstOrDefault(x => x.Id == userId) ??
-           throw new Exception($"user with id {userId} not found");
+        var user = dbContext.NewsUsers.FindModel(userId);
 
         if (news.Likes.Any(x => x.NewsUser.Id == userId))
             throw new Exception("the user has already liked this post!");
@@ -72,11 +68,9 @@ public class NewsAppService
             .Include(x => x.Comments)
             .Include(x => x.DisLikes)
             .ThenInclude(x => x.NewsUser)
-            .FirstOrDefault(x => x.Id == newsId) ??
-            throw new Exception($"news with id {newsId} not found");
+            .FindModel(newsId);
 
-        var user = dbContext.NewsUsers.FirstOrDefault(x => x.Id == userId) ??
-           throw new Exception($"user with id {userId} not found");
+        var user = dbContext.NewsUsers.FindModel(userId);
         var dislike = new NewsDisLike(news, user);
 
         news.DisLikes.Add(dislike);
@@ -93,11 +87,9 @@ public class NewsAppService
             .Include(x => x.Comments)
             .ThenInclude(x => x.NewsUser)
             .Include(x => x.DisLikes)
-            .FirstOrDefault(x => x.Id == newsId) ??
-            throw new Exception($"news with id {newsId} not found");
+            .FindModel(newsId);
 
-        var user = dbContext.NewsUsers.FirstOrDefault(x => x.Id == userId) ??
-           throw new Exception($"user with id {userId} not found");
+        var user = dbContext.NewsUsers.FindModel(userId);
         var comment = new NewsComment(news, user, body);
 
         news.Comments.Add(comment);
@@ -114,8 +106,8 @@ public class NewsAppService
             .Include(x => x.DisLikes)
             .Include(x => x.NewsCategories)
                 .ThenInclude(c => c.NewsCategory)
-            .FirstOrDefault(x => x.Id == id);
-            
+            .FindModel(id);
+
         AddViewEvent(id);
         return news;
     }
@@ -126,7 +118,7 @@ public class NewsAppService
         dbContext.SaveChanges();
     }
 
-    private Int64 GenerateNewsNumber()
+    private long GenerateNewsNumber()
     {
         Random rnd = new Random();
         for (int i = 0; i < 5; i++)
