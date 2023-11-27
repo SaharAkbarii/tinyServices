@@ -17,9 +17,12 @@ public class NewsAppService
     {
         var news = new News(title, body);
         news.NewsNumber = GenerateNewsNumber();
-        for (var i = 0; i < categoryId.Count; i++)
+        var categories = await dbContext.NewsCategories
+            .Where(x=> categoryId.Any(i=> i == x.Id))
+            .ToListAsync();
+            
+        foreach(var category in categories)
         {
-            var category = await dbContext.NewsCategories.FindModelAsync(categoryId[i]);
             var categoryContainer = new NewsCategoryContainer(category, news);
             news.NewsCategories.Add(categoryContainer);
         }
@@ -100,7 +103,7 @@ public class NewsAppService
     }
     public async Task<News> GetNews(Guid id)
     {
-        var news = await  dbContext.News
+        var news = await dbContext.News
             .Include(x => x.Likes)
             .Include(x => x.Comments)
             .Include(x => x.DisLikes)

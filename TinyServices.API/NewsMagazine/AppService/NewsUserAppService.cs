@@ -80,9 +80,12 @@ public class NewsUserAppService
         var user = await dbContext.NewsUsers.FindModelAsync(userId);
 
         user.FavoriteCategories.Clear();
-        for (int i = 0; i < categoryIds.Count; i++)
+        var categories = await dbContext.NewsCategories
+            .Where(x => categoryIds.Any(i => i == x.Id))
+            .ToListAsync();
+
+        foreach (var category in categories)
         {
-            var category = await dbContext.NewsCategories.FindModelAsync(categoryIds[i]);
             var favoriteCategory = new FavoriteCategory(user, category);
             user.FavoriteCategories.Add(favoriteCategory);
         }
