@@ -19,9 +19,9 @@ public class NewsUserController : Controller
         this.mapper = mapper;
     }
     [HttpPost]
-    public NewsUserDto Create([FromBody] CreateNewsUserInput input)
+    public async Task<NewsUserDto> Create([FromBody] CreateNewsUserInput input)
     {
-        var user = service.Create(input.Name, input.Email);
+        var user =await service.Create(input.Name, input.Email);
 
         var dto = mapper.Map<NewsUserDto>(user);
         return dto;
@@ -29,18 +29,18 @@ public class NewsUserController : Controller
 
     [HttpGet]
     [Route("Feed/{userId:guid}")]
-    public List<NewsInformationDto> Feed(int count, int offset, Guid userId)
+    public async Task<List<NewsInformationDto>> Feed(int count, int offset, Guid userId)
     {
-        var news = service.Feed(count, offset, userId);
+        var news =await service.Feed(count, offset, userId);
         var dto = mapper.Map<List<NewsInformationDto>>(news);
         return dto;
     }
 
     [HttpPut]
     [Route("{id:guid}/set/category")]
-    public NewsUserDto SetFavoriteCategory(Guid id,[FromBody]CreateFavoriteCategory input)
+    public async Task<NewsUserDto> SetFavoriteCategory(Guid id,[FromBody]CreateFavoriteCategory input)
     {
-        var user = service.SetFavoriteCategory(id, input.CategoryIds);
+        var user =await service.SetFavoriteCategory(id, input.CategoryIds);
         var dto = mapper.Map<NewsUserDto>(user);
         return dto;
     }

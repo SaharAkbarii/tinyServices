@@ -19,53 +19,53 @@ public class NewsController : Controller
         this.mapper = mapper;
     }
     [HttpPost]
-    public NewsDto Create([FromBody] CreateNewsInput input)
+    public async Task<NewsDto> Create([FromBody] CreateNewsInput input)
     {
-        var news = service.Create(input.Title, input.Body, input.CategoryId);
+        var news =await service.Create(input.Title, input.Body, input.CategoryId);
 
         var dto = mapper.Map<NewsDto>(news);
         return dto;
     }
     [HttpPut]
     [Route("{id:guid}")]
-    public NewsDto Update(Guid id, [FromBody] UpdateNewsInput input)
+    public async Task<NewsDto> Update(Guid id, [FromBody] UpdateNewsInput input)
     {
         var status = mapper.Map<Status>(input.State);
-        var news = service.Update(id, input.Title, input.Body, status);
+        var news =await service.Update(id, input.Title, input.Body, status);
         var dto = mapper.Map<NewsDto>(news);
         return dto;
     }
     [HttpPut]
     [Route("{id:guid}/like/{userId:guid}")]
-    public NewsDto Like(Guid id, Guid userId)
+    public async Task<NewsDto> Like(Guid id, Guid userId)
     {
-        var news = service.Like(id, userId);
+        var news =await service.Like(id, userId);
         var dto = mapper.Map<NewsDto>(news);
         return dto;
     }
     [HttpPut]
     [Route("{id:guid}/dislike/{userId:guid}")]
-    public NewsDto DisLike(Guid id, Guid userId)
+    public async Task<NewsDto> DisLike(Guid id, Guid userId)
     {
-        var news = service.DisLike(id, userId);
+        var news =await service.DisLike(id, userId);
         var dto = mapper.Map<NewsDto>(news);
         return dto;
     }
 
     [HttpPost]
     [Route("{id:guid}/comment/{userId:guid}")]
-    public NewsDto Comment(Guid id, Guid userId, [FromBody] CreateNewsCommentInput input)
+    public async Task<NewsDto> Comment(Guid id, Guid userId, [FromBody] CreateNewsCommentInput input)
     {
-        var comment = service.Comment(id, userId, input.Body);
+        var comment =await service.Comment(id, userId, input.Body);
         var dto = mapper.Map<NewsDto>(comment);
         return dto;
     }
 
     [HttpGet]
     [Route("{id:guid}")]
-    public NewsDto GetNews(Guid id)
+    public async Task<NewsDto> GetNews(Guid id)
     {
-        var news = service.GetNews(id);
+        var news =await service.GetNews(id);
         var dto = mapper.Map<NewsDto>(news);
         return dto;
     }

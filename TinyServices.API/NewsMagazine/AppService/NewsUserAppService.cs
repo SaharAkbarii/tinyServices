@@ -12,15 +12,15 @@ public class NewsUserAppService
     {
         this.dbContext = dbContext;
     }
-    public NewsUser Create(string name, string emailvalue)
+    public async Task<NewsUser> Create(string name, string emailvalue)
     {
         var email = new Email(emailvalue);
         var user = new NewsUser(email, name);
-        dbContext.NewsUsers.Add(user);
-        dbContext.SaveChanges();
+        await dbContext.NewsUsers.AddAsync(user);
+        await dbContext.SaveChangesAsync();
         return user;
     }
-    public List<NewsInformation> Feed(int count, int offset, Guid userId)
+    public async Task<List<NewsInformation>> Feed(int count, int offset, Guid userId)
     {
         var query = dbContext.News
             .Include(x => x.Likes)
@@ -30,10 +30,10 @@ public class NewsUserAppService
                 .ThenInclude(c => c.NewsCategory)
             .Where(x => x.Status == Status.Publish);
 
-        var user = dbContext.NewsUsers
+        var user = await dbContext.NewsUsers
             .Include(x => x.FavoriteCategories)
                 .ThenInclude(c => c.Category)
-            .FindModel(userId);
+            .FindModelAsync(userId);
 
         if (user.FavoriteCategories != null && user.FavoriteCategories.Any())
         {
@@ -41,7 +41,7 @@ public class NewsUserAppService
             query = query.Where(x => x.NewsCategories.Any(y => categoryIds.Any(c => c == y.NewsCategory.Id)));
         }
 
-        var result = query.OrderByDescending(x => x.PublishAt)
+        var result = await query.OrderByDescending(x => x.PublishAt)
         .Skip(offset)
         .Take(count)
         .Select(x => new NewsInformation
@@ -70,23 +70,23 @@ public class NewsUserAppService
                 })
                 .ToList()
         })
-        .ToList();
+        .ToListAsync();
 
 
         return result;
     }
-    public NewsUser SetFavoriteCategory(Guid userId, List<Guid> categoryIds)
+    public async Task<NewsUser> SetFavoriteCategory(Guid userId, List<Guid> categoryIds)
     {
-        var user = dbContext.NewsUsers.FindModel(userId);
+        var user = await dbContext.NewsUsers.FindModelAsync(userId);
 
         user.FavoriteCategories.Clear();
         for (int i = 0; i < categoryIds.Count; i++)
         {
-            var category = dbContext.NewsCategories.FindModel(categoryIds[i]);
+            var category = await dbContext.NewsCategories.FindModelAsync(categoryIds[i]);
             var favoriteCategory = new FavoriteCategory(user, category);
             user.FavoriteCategories.Add(favoriteCategory);
         }
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
         return user;
     }
 }

@@ -13,109 +13,109 @@ public class NewsAppService
         this.dbContext = dbContext;
     }
 
-    public News Create(string title, string body, List<Guid> categoryId)
+    public async Task<News> Create(string title, string body, List<Guid> categoryId)
     {
         var news = new News(title, body);
         news.NewsNumber = GenerateNewsNumber();
         for (var i = 0; i < categoryId.Count; i++)
         {
-            var category = dbContext.NewsCategories.FindModel(categoryId[i]);
+            var category = await dbContext.NewsCategories.FindModelAsync(categoryId[i]);
             var categoryContainer = new NewsCategoryContainer(category, news);
             news.NewsCategories.Add(categoryContainer);
         }
-        dbContext.News.Add(news);
-        dbContext.SaveChanges();
+        await dbContext.News.AddAsync(news);
+        await dbContext.SaveChangesAsync();
         return news;
     }
 
-    public News Update(Guid newsId, string title, string body, Status status)
+    public async Task<News> Update(Guid newsId, string title, string body, Status status)
     {
-        var news = dbContext.News.FindModel(newsId);
+        var news = await dbContext.News.FindModelAsync(newsId);
         news.Title = title;
         news.Body = body;
         news.ChangeStatus(status);
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
         return news;
     }
 
-    public News Like(Guid newsId, Guid userId)
+    public async Task<News> Like(Guid newsId, Guid userId)
     {
-        var news = dbContext.News
+        var news = await dbContext.News
             .Include(x => x.Likes)
             .ThenInclude(x => x.NewsUser)
             .Include(x => x.Comments)
             .Include(x => x.DisLikes)
-            .FindModel(newsId);
+            .FindModelAsync(newsId);
 
-        var user = dbContext.NewsUsers.FindModel(userId);
+        var user = await dbContext.NewsUsers.FindModelAsync(userId);
 
         if (news.Likes.Any(x => x.NewsUser.Id == userId))
             throw new Exception("the user has already liked this post!");
         var like = new NewsLike(news, user);
 
         news.Likes.Add(like);
-        dbContext.NewsLikes.Add(like);
-        dbContext.SaveChanges();
+        await dbContext.NewsLikes.AddAsync(like);
+        await dbContext.SaveChangesAsync();
 
         return news;
 
     }
 
-    public News DisLike(Guid newsId, Guid userId)
+    public async Task<News> DisLike(Guid newsId, Guid userId)
     {
-        var news = dbContext.News
+        var news = await dbContext.News
             .Include(x => x.Likes)
             .Include(x => x.Comments)
             .Include(x => x.DisLikes)
             .ThenInclude(x => x.NewsUser)
-            .FindModel(newsId);
+            .FindModelAsync(newsId);
 
-        var user = dbContext.NewsUsers.FindModel(userId);
+        var user = await dbContext.NewsUsers.FindModelAsync(userId);
         var dislike = new NewsDisLike(news, user);
 
         news.DisLikes.Add(dislike);
-        dbContext.NewsDisLikes.Add(dislike);
-        dbContext.SaveChanges();
+        await dbContext.NewsDisLikes.AddAsync(dislike);
+        await dbContext.SaveChangesAsync();
 
         return news;
     }
 
-    public News Comment(Guid newsId, Guid userId, string body)
+    public async Task<News> Comment(Guid newsId, Guid userId, string body)
     {
-        var news = dbContext.News
+        var news = await dbContext.News
             .Include(x => x.Likes)
             .Include(x => x.Comments)
             .ThenInclude(x => x.NewsUser)
             .Include(x => x.DisLikes)
-            .FindModel(newsId);
+            .FindModelAsync(newsId);
 
-        var user = dbContext.NewsUsers.FindModel(userId);
+        var user = await dbContext.NewsUsers.FindModelAsync(userId);
         var comment = new NewsComment(news, user, body);
 
         news.Comments.Add(comment);
-        dbContext.NewsComments.Add(comment);
-        dbContext.SaveChanges();
+        await dbContext.NewsComments.AddAsync(comment);
+        await dbContext.SaveChangesAsync();
 
         return news;
     }
-    public News GetNews(Guid id)
+    public async Task<News> GetNews(Guid id)
     {
-        var news = dbContext.News
+        var news = await  dbContext.News
             .Include(x => x.Likes)
             .Include(x => x.Comments)
             .Include(x => x.DisLikes)
             .Include(x => x.NewsCategories)
                 .ThenInclude(c => c.NewsCategory)
-            .FindModel(id);
+            .FindModelAsync(id);
 
-        AddViewEvent(id);
+        await AddViewEvent(id);
         return news;
     }
-    private void AddViewEvent(Guid id)
+    private async Task AddViewEvent(Guid id)
     {
         var view = new NewsViewInfo(id);
         dbContext.NewsViewInfos.Add(view);
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
     }
 
     private long GenerateNewsNumber()

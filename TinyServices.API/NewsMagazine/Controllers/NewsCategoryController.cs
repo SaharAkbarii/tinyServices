@@ -17,9 +17,9 @@ public class NewsCategoryController : Controller
         this.mapper = mapper;
     }
     [HttpPost]
-    public NewsCategoryDto Create([FromBody] CreateNewsCategoryInput input)
+    public async Task<NewsCategoryDto> Create([FromBody] CreateNewsCategoryInput input)
     {
-        var category = service.Create(input.Name);
+        var category = await service.Create(input.Name);
 
         var dto = mapper.Map<NewsCategoryDto>(category);
         return dto;

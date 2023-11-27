@@ -12,11 +12,11 @@ public class NewsCategoryAppService
         this.dbContext = dbContext;
     }
 
-    public NewsCategory Create(string name)
+    public async Task<NewsCategory> Create(string name)
     {
         var category = new NewsCategory(name);
-        dbContext.NewsCategories.Add(category);
-        dbContext.SaveChanges();
+        await dbContext.NewsCategories.AddAsync(category);
+        await dbContext.SaveChangesAsync();
         return category;
     }
 }
