@@ -13,7 +13,7 @@ public class News : Entity
         Body = body;
         Status = Status.Draft;
     }
-    private List<NewsLike> likes;
+    private List<NewsLike<News>> likes;
     private List<NewsComment> comments;
     private List<NewsDisLike> disLikes;
     private List<NewsCategoryContainer> newsCategories;
@@ -22,12 +22,12 @@ public class News : Entity
     public string Body { get; set; }
     public Status Status { get; private set; }
     public long NewsNumber { get; set; }
-    public List<NewsLike> Likes
+    public List<NewsLike<News>> Likes
     {
         get
         {
             if (likes == null)
-                likes = new List<NewsLike>();
+                likes = new List<NewsLike<News>>();
             return likes;
         }
         set => likes = value;

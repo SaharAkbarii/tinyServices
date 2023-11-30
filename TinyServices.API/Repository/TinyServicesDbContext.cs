@@ -24,9 +24,8 @@ public class TinyServicesDbContext : DbContext
     modelBuilder.Entity<Connection>().HasOne(o => o.User).WithMany(o=> o.Conections);
     modelBuilder.Entity<ConnectionRequest>().HasOne(o=> o.Receiver).WithMany(o=> o.ConnectionRequests);
     modelBuilder.Entity<NewsUser>().OwnsOne(o=> o.Email).HasIndex(x=> x.Value).IsUnique();
-    modelBuilder.Entity<News>().HasMany(o=> o.Likes).WithOne(x=> x.NewsPost);
-    modelBuilder.Entity<NewsLike>().HasOne(o=> o.NewsUser);
-    // modelBuilder.Entity<LinkedinUser>().HasOne()
+    modelBuilder.Entity<News>().HasMany(o=> o.Likes).WithOne(x=> x.LikedEntity);
+    modelBuilder.Entity<NewsLike<News>>().HasOne(o=> o.NewsUser);
   }
 
   public DbSet<ShortLink> ShortLinks { get; set; }
@@ -47,7 +46,7 @@ public class TinyServicesDbContext : DbContext
   public DbSet<Connection> Connections {get; set;}
   public DbSet<News> News {get; set;}
   public DbSet<NewsUser> NewsUsers {get; set;}
-  public DbSet<NewsLike> NewsLikes {get; set;}
+  public DbSet<NewsLike<News>> NewsLikes {get; set;}
   public DbSet<NewsDisLike> NewsDisLikes { get; set; }
   public DbSet<NewsComment> NewsComments { get; set; }
   public DbSet<NewsCategory> NewsCategories { get; set; }

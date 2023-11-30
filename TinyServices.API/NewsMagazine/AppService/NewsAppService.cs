@@ -18,10 +18,10 @@ public class NewsAppService
         var news = new News(title, body);
         news.NewsNumber = GenerateNewsNumber();
         var categories = await dbContext.NewsCategories
-            .Where(x=> categoryId.Any(i=> i == x.Id))
+            .Where(x => categoryId.Any(i => i == x.Id))
             .ToListAsync();
-            
-        foreach(var category in categories)
+
+        foreach (var category in categories)
         {
             var categoryContainer = new NewsCategoryContainer(category, news);
             news.NewsCategories.Add(categoryContainer);
@@ -54,7 +54,12 @@ public class NewsAppService
 
         if (news.Likes.Any(x => x.NewsUser.Id == userId))
             throw new Exception("the user has already liked this post!");
-        var like = new NewsLike(news, user);
+        if (news.Status != Status.Publish)
+            throw new Exception("You can't like this news.");
+        if (DateTimeOffset.UtcNow.AddMonths(-1) > news.PublishAt)
+            throw new Exception("the news can't be liked.");
+
+        var like = new NewsLike<News>(news, user);
 
         news.Likes.Add(like);
         await dbContext.NewsLikes.AddAsync(like);

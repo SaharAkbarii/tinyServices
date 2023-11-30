@@ -34,7 +34,7 @@ public class TinyServicesMappingProfile : Profile
         CreateMap<PostInformation, PostInformationDto>();
         CreateMap<LinkedinUserInformation, LinkedinUserInformationDto>();
         CreateMap<News, NewsDto>();
-        CreateMap<NewsLike, NewsLikeDto>();
+        CreateMap<NewsLike<News>, NewsLikeDto>();
         CreateMap<NewsComment, NewsCommentDto>();
         CreateMap<NewsDisLike, NewsDisLikeDto>();
         CreateMap<Status, StatusDto>();
