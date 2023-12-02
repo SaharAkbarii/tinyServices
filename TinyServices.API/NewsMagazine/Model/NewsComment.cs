@@ -18,6 +18,7 @@ public class NewsComment : Entity
     public News News { get; set; }
     public NewsUser NewsUser { get; set; }
     public string Body { get; set; }
+    public List<NewsLike<NewsComment>> Likes {get; set;}
 }
 
 

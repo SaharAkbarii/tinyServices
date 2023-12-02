@@ -44,6 +44,14 @@ public class NewsController : Controller
         return dto;
     }
     [HttpPut]
+    [Route("comment/{commentId:guid}/like/{userId:guid}")]
+    public async Task<NewsCommentDto> CommentLike(Guid commentId, Guid userId)
+    {
+        var comment = await service.CommentLike(commentId, userId);
+        var dto = mapper.Map<NewsCommentDto>(comment);
+        return dto;
+    }
+    [HttpPut]
     [Route("{id:guid}/dislike/{userId:guid}")]
     public async Task<NewsDto> DisLike(Guid id, Guid userId)
     {
