@@ -5,4 +5,5 @@ public class NewsCommentDto
     public string Body { get; set; }
     public Guid Id { get; set; }
     public List<NewsLikeDto> Likes {get; set;}
+    public List<NewsDisLikeDto> DisLikes {get; set;}
 }

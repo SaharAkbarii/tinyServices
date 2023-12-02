@@ -21,7 +21,7 @@ public class NewsController : Controller
     [HttpPost]
     public async Task<NewsDto> Create([FromBody] CreateNewsInput input)
     {
-        var news =await service.Create(input.Title, input.Body, input.CategoryId);
+        var news = await service.Create(input.Title, input.Body, input.CategoryId);
 
         var dto = mapper.Map<NewsDto>(news);
         return dto;
@@ -31,7 +31,7 @@ public class NewsController : Controller
     public async Task<NewsDto> Update(Guid id, [FromBody] UpdateNewsInput input)
     {
         var status = mapper.Map<Status>(input.State);
-        var news =await service.Update(id, input.Title, input.Body, status);
+        var news = await service.Update(id, input.Title, input.Body, status);
         var dto = mapper.Map<NewsDto>(news);
         return dto;
     }
@@ -39,7 +39,7 @@ public class NewsController : Controller
     [Route("{id:guid}/like/{userId:guid}")]
     public async Task<NewsDto> Like(Guid id, Guid userId)
     {
-        var news =await service.Like(id, userId);
+        var news = await service.Like(id, userId);
         var dto = mapper.Map<NewsDto>(news);
         return dto;
     }
@@ -55,8 +55,16 @@ public class NewsController : Controller
     [Route("{id:guid}/dislike/{userId:guid}")]
     public async Task<NewsDto> DisLike(Guid id, Guid userId)
     {
-        var news =await service.DisLike(id, userId);
+        var news = await service.DisLike(id, userId);
         var dto = mapper.Map<NewsDto>(news);
+        return dto;
+    }
+    [HttpPut]
+    [Route("comment/{commentId:guid}/dislike/{userId:guid}")]
+    public async Task<NewsCommentDto> CommentDisLike(Guid commentId, Guid userId)
+    {
+        var comment = await service.CommentDisLike(commentId, userId);
+        var dto = mapper.Map<NewsCommentDto>(comment);
         return dto;
     }
 
@@ -64,7 +72,7 @@ public class NewsController : Controller
     [Route("{id:guid}/comment/{userId:guid}")]
     public async Task<NewsDto> Comment(Guid id, Guid userId, [FromBody] CreateNewsCommentInput input)
     {
-        var comment =await service.Comment(id, userId, input.Body);
+        var comment = await service.Comment(id, userId, input.Body);
         var dto = mapper.Map<NewsDto>(comment);
         return dto;
     }
@@ -73,7 +81,7 @@ public class NewsController : Controller
     [Route("{id:guid}")]
     public async Task<NewsDto> GetNews(Guid id)
     {
-        var news =await service.GetNews(id);
+        var news = await service.GetNews(id);
         var dto = mapper.Map<NewsDto>(news);
         return dto;
     }

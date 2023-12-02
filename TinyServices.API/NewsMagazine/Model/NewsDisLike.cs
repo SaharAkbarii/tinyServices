@@ -10,11 +10,11 @@ public class NewsDisLike<TEntity> : Entity
     }
     public NewsDisLike(TEntity likedEntity, NewsUser newsUser)
     {
-        LikedEntity = likedEntity;
+        DisLikedEntity = likedEntity;
         NewsUser = newsUser;
     }
 
-    public TEntity LikedEntity { get; set; }
+    public TEntity DisLikedEntity { get; set; }
     public NewsUser NewsUser { get; set; }
 }
 
