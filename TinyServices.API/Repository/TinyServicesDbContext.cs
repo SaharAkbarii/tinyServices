@@ -50,7 +50,7 @@ public class TinyServicesDbContext : DbContext
   public DbSet<NewsUser> NewsUsers {get; set;}
   public DbSet<NewsLike<News>> NewsLikes {get; set;}
   public DbSet<NewsLike<NewsComment>> NewsCommentLikes {get; set;}
-  public DbSet<NewsDisLike> NewsDisLikes { get; set; }
+  public DbSet<NewsDisLike<News>> NewsDisLikes { get; set; }
   public DbSet<NewsComment> NewsComments { get; set; }
   public DbSet<NewsCategory> NewsCategories { get; set; }
   public DbSet<NewsViewInfo> NewsViewInfos {get; set;}

@@ -15,7 +15,7 @@ public class News : Entity
     }
     private List<NewsLike<News>> likes;
     private List<NewsComment> comments;
-    private List<NewsDisLike> disLikes;
+    private List<NewsDisLike<News>> disLikes;
     private List<NewsCategoryContainer> newsCategories;
     public DateTimeOffset? PublishAt { get; set; }
     public string Title { get; set; }
@@ -42,12 +42,12 @@ public class News : Entity
         }
         set => comments = value;
     }
-    public List<NewsDisLike> DisLikes
+    public List<NewsDisLike<News>> DisLikes
     {
         get
         {
             if (disLikes == null)
-                disLikes = new List<NewsDisLike>();
+                disLikes = new List<NewsDisLike<News>>();
             return disLikes;
         }
         set => disLikes = value;

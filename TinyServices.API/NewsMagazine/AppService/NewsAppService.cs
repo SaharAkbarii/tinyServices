@@ -99,7 +99,7 @@ public class NewsAppService
             .FindModelAsync(newsId);
 
         var user = await dbContext.NewsUsers.FindModelAsync(userId);
-        var dislike = new NewsDisLike(news, user);
+        var dislike = new NewsDisLike<News>(news, user);
 
         news.DisLikes.Add(dislike);
         await dbContext.NewsDisLikes.AddAsync(dislike);

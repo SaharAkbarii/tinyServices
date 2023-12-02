@@ -37,7 +37,7 @@ public class TinyServicesMappingProfile : Profile
         CreateMap<NewsLike<News>, NewsLikeDto>();
         CreateMap<NewsLike<NewsComment>, NewsLikeDto>();
         CreateMap<NewsComment, NewsCommentDto>();
-        CreateMap<NewsDisLike, NewsDisLikeDto>();
+        CreateMap<NewsDisLike<News>, NewsDisLikeDto>();
         CreateMap<Status, StatusDto>();
         CreateMap<StatusDto, Status>();
         CreateMap<NewsUser, NewsUserDto>();
