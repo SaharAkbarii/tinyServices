@@ -14,7 +14,7 @@ public class News : Entity
         Status = Status.Draft;
     }
     private List<NewsLike<News>> likes;
-    private List<NewsComment> comments;
+    private List<NewsComment<News>> comments;
     private List<NewsDisLike<News>> disLikes;
     private List<NewsCategoryContainer> newsCategories;
     public DateTimeOffset? PublishAt { get; set; }
@@ -32,12 +32,12 @@ public class News : Entity
         }
         set => likes = value;
     }
-    public List<NewsComment> Comments
+    public List<NewsComment<News>> Comments
     {
         get
         {
             if (comments == null)
-                comments = new List<NewsComment>();
+                comments = new List<NewsComment<News>>();
             return comments;
         }
         set => comments = value;

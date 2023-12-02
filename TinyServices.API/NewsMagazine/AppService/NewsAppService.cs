@@ -68,7 +68,7 @@ public class NewsAppService
         return news;
 
     }
-    public async Task<NewsComment> CommentLike(Guid commentId, Guid userId)
+    public async Task<NewsComment<News>> CommentLike(Guid commentId, Guid userId)
     {
         var comment = await dbContext.NewsComments
             .Include(x => x.Likes)
@@ -79,7 +79,7 @@ public class NewsAppService
 
         if (comment.Likes.Any(x => x.NewsUser.Id == userId))
             throw new Exception("the user has already liked this post!");
-        var like = new NewsLike<NewsComment>(comment, user);
+        var like = new NewsLike<NewsComment<News>>(comment, user);
 
         comment.Likes.Add(like);
         await dbContext.NewsCommentLikes.AddAsync(like);
@@ -108,7 +108,7 @@ public class NewsAppService
         return news;
     }
 
-    public async Task<NewsComment> CommentDisLike(Guid commentId, Guid userId)
+    public async Task<NewsComment<News>> CommentDisLike(Guid commentId, Guid userId)
     {
         var comment = await dbContext.NewsComments
             .Include(x => x.DisLikes)
@@ -121,7 +121,7 @@ public class NewsAppService
 
         if (comment.DisLikes.Any(x => x.NewsUser.Id == userId))
             throw new Exception("the user has already disliked this post!");
-        var disLike = new NewsDisLike<NewsComment>(comment, user);
+        var disLike = new NewsDisLike<NewsComment<News>>(comment, user);
 
         comment.DisLikes.Add(disLike);
         await dbContext.NewsCommentDisLikes.AddAsync(disLike);
@@ -140,7 +140,7 @@ public class NewsAppService
             .FindModelAsync(newsId);
 
         var user = await dbContext.NewsUsers.FindModelAsync(userId);
-        var comment = new NewsComment(news, user, body);
+        var comment = new NewsComment<News>(news, user, body);
 
         news.Comments.Add(comment);
         await dbContext.NewsComments.AddAsync(comment);

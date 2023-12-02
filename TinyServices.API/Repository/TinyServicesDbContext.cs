@@ -26,8 +26,8 @@ public class TinyServicesDbContext : DbContext
     modelBuilder.Entity<NewsUser>().OwnsOne(o=> o.Email).HasIndex(x=> x.Value).IsUnique();
     modelBuilder.Entity<News>().HasMany(o=> o.Likes).WithOne(x=> x.LikedEntity);
     modelBuilder.Entity<NewsLike<News>>().HasOne(o=> o.NewsUser);
-    modelBuilder.Entity<NewsLike<NewsComment>>().HasOne(o=> o.NewsUser);
-    modelBuilder.Entity<NewsComment>().HasMany(o=> o.Likes).WithOne(x=> x.LikedEntity);
+    modelBuilder.Entity<NewsLike<NewsComment<News>>>().HasOne(o=> o.NewsUser);
+    modelBuilder.Entity<NewsComment<News>>().HasMany(o=> o.Likes).WithOne(x=> x.LikedEntity);
   }
 
   public DbSet<ShortLink> ShortLinks { get; set; }
@@ -49,10 +49,10 @@ public class TinyServicesDbContext : DbContext
   public DbSet<News> News {get; set;}
   public DbSet<NewsUser> NewsUsers {get; set;}
   public DbSet<NewsLike<News>> NewsLikes {get; set;}
-  public DbSet<NewsLike<NewsComment>> NewsCommentLikes {get; set;}
+  public DbSet<NewsLike<NewsComment<News>>> NewsCommentLikes {get; set;}
   public DbSet<NewsDisLike<News>> NewsDisLikes { get; set; }
-  public DbSet<NewsDisLike<NewsComment>> NewsCommentDisLikes {get; set;}
-  public DbSet<NewsComment> NewsComments { get; set; }
+  public DbSet<NewsDisLike<NewsComment<News>>> NewsCommentDisLikes {get; set;}
+  public DbSet<NewsComment<News>> NewsComments { get; set; }
   public DbSet<NewsCategory> NewsCategories { get; set; }
   public DbSet<NewsViewInfo> NewsViewInfos {get; set;}
 }
